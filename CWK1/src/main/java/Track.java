@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
@@ -99,6 +100,17 @@ public class Track {
   }
 
   // TODO: Create a stub for totalDistance()
+  public double totalDistance(){
+    double total_distance = 0;
+    for (int index=1;index < size();index++){
+      total_distance += Point.greatCircleDistance(points.get(index-1), points.get(index-1));
+    }
+    return total_distance;
+  }
 
   // TODO: Create a stub for averageSpeed()
+  public double averageSpeed(){
+    int total_seconds = ChronoUnit.SECONDS.between(points.get(0).getTime(),points.get(size()-1).getTime());
+    return totalDistance()/total_seconds;
+  }
 }
