@@ -5,7 +5,8 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
-
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Represents a point in space and time, recorded by a GPS sensor.
@@ -129,5 +130,30 @@ public class Track {
     }
     int total_seconds = (int) ChronoUnit.SECONDS.between(points.get(0).getTime(),points.get(size()-1).getTime());
     return totalDistance()/total_seconds;
+  }
+  // TODO: Create a stub for writeKML()
+  // KML is a languale that google erth can read 
+  public void writeKML(String filename) throws IOException{
+    try (FileWriter file_writer = new FileWriter(filename)){
+      file_writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+      file_writer.write("<kml>\n");
+      file_writer.write("<Document>\n");
+      file_writer.write("<name>Track</name>\n");
+      file_writer.write("<Placemark>\n");
+      file_writer.write("<LineString>\n");
+      file_writer.write("<coordinates>\n");
+      // create a loop to write the coordanates for every point in the list
+      for (int index = 0; index < points.size();index ++){
+        file_writer.write(String.format("%f,%f,%f ", points.get(index).getLongitude(),points.get(index).getLatitude(),points.get(index).getElevation()));
+      }
+      // close all the diffrent dividers
+      file_writer.write("</coordinates>\n");
+      file_writer.write("</LineString>\n");
+      file_writer.write("</Placemark>\n");
+      file_writer.write("</Document>\n");
+      file_writer.write("</kml>\n");
+    }catch(IOException error_writing){
+      throw new IOException("there has been a problem writing the file" + error_writing);
+    }
   }
 }
